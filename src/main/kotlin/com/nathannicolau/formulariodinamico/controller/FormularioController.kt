@@ -29,7 +29,13 @@ class FormularioController(
     @PostMapping("recuperar")
     fun recuperarPessoa(@RequestBody pessoaFilter: PessoaFilter): PessoaResponse {
         return try {
-            PessoaResponse.data(mensagem = "Pessoas encontradas", data = pessoaService.recuperarPessoa(pessoaFilter))
+            val pessoas = pessoaService.recuperarPessoa(pessoaFilter)
+            val mensagem = if (pessoas.isEmpty()) {
+                "Nenhuma pessoa encontrada com os filtros informados"
+            } else {
+                "${pessoas.size} Pessoa(s) encontrada(s)"
+            }
+            PessoaResponse.data(mensagem = mensagem, data = pessoas)
         }  catch (e: Exception) {
             PessoaResponse.erro("Erro ao recuperar pessoa: ${e.message}")
         }

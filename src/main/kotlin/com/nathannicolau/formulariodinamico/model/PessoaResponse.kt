@@ -25,7 +25,7 @@ data class PessoaResponse(
         }
 
         fun data(mensagem: String, data: List<Pessoa>): PessoaResponse {
-            return response(codigo = "200", mensagem = "${data.size} Pessoa(s) encontada(s)", data = data)
+            return response(codigo = "200", mensagem = mensagem, data = data)
         }
 
     }
