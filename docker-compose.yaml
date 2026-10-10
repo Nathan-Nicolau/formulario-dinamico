@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb_estudos
+    restart: unless-stopped
+    ports:
+      - "27018:27017" # <--- Alterado aqui: O seu PC usa 27018, o Docker usa 27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=senha_secreta
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:

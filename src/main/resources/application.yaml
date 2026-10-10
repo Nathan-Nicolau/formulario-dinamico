@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: formulario-dinamico
+  mongodb:
+    uri: mongodb://admin:senha_secreta@localhost:27018/saloon_db?authSource=admin
