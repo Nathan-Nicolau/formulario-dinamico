@@ -1,5 +1,6 @@
 package com.nathannicolau.formulariodinamico.model.pessoa
 
+import com.nathannicolau.formulariodinamico.model.ValidadorDocumento
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.io.Serializable
@@ -20,4 +21,11 @@ data class Pessoa(
     val nome: String? = null,
     val email: String? = null,
     val dinamicos: Map<String, Any> = emptyMap()
-): Serializable
+): ValidadorDocumento,  Serializable {
+
+    override fun validarCadastro() {
+        require(nome != null) { "O nome deve ser informado para cadastro" }
+        require(email != null) { "Email deve ser informado para cadastro" }
+    }
+
+}

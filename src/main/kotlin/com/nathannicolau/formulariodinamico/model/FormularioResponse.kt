@@ -7,7 +7,7 @@ data class FormularioResponse<T>(
     val codigo: String,
     val mensagem: String,
     val momento: String = Date().toString(),
-    val data: Pagina<T>
+    val data: Pagina<T>? = null,
 ): Serializable {
 
     companion object {

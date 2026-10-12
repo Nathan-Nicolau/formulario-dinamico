@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-@RestController(value = "formulario")
-@RequestMapping("/api/formulario")
+@RestController(value = "formulario-pessoas")
+@RequestMapping("/api/pessoas")
 class PessoaController(
     val pessoaService: PessoaService
 ) {
@@ -26,6 +26,19 @@ class PessoaController(
         }
     }
 
+    @PostMapping("cadastrarEmLote")
+    fun cadastrarPessoasEmLote(@RequestBody pessoas: List<Pessoa>): FormularioResponse<Pessoa> {
+        return try {
+            val cadastradas = pessoaService.cadastrarPessoas(pessoas)
+            FormularioResponse.sucesso("Pessoas cadastradas com sucesso: ${cadastradas.map { "Nome: " + it.nome + "ID: " + it.id }}")
+        } catch (e: Exception) {
+            FormularioResponse.erro("Erro ao cadastrar pessoa: ${e.message}")
+        }
+    }
+
+    /**
+     * Recuperação dos registros de pessoas com paginação aplicada dentro da classe PessoaFilter
+     * */
     @PostMapping("recuperar")
     fun recuperarPessoa(@RequestBody pessoaFilter: PessoaFilter): FormularioResponse<Pessoa> {
         return try {

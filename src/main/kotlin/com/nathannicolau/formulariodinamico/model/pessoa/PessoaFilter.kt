@@ -1,16 +1,13 @@
 package com.nathannicolau.formulariodinamico.model.pessoa
 
+import com.nathannicolau.formulariodinamico.model.Filter
 import java.io.Serializable
 
 open class PessoaFilter(
-    open val id: String? = null,
+    override val id: String? = null,
     open val nome: String? = null,
     open val email: String? = null,
-    open val dinamicos: Map<String, Any>? = null,
-    val pagina: Int? = null,
-    val tamanho: Int? = null,
-): Serializable {
-
-    fun possuiPaginacao() = pagina != null && tamanho != null
-
-}
+    override val dinamicos: Map<String, Any>? = null,
+    override val pagina: Int? = null,
+    override val tamanho: Int? = null
+): Filter(id = id, dinamicos = dinamicos), Serializable

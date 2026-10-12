@@ -15,10 +15,9 @@ class PessoaService(
 ) {
 
     fun cadastrarPessoa(pessoa: Pessoa): Pessoa {
-        require(!pessoa.nome.isNullOrBlank()) { "O nome da pessoa é obrigatório" }
-        require(!pessoa.email.isNullOrBlank()) { "O email da pessoa é obrigatório" }
+        pessoa.validarCadastro()
 
-        val emailExistente = pessoaRepository.findByEmail(pessoa.email)
+        val emailExistente = pessoaRepository.findByEmail(pessoa.email!!)
         if (emailExistente != null) {
             throw IllegalArgumentException("Já existe uma pessoa cadastrada com o email: ${pessoa.email}")
         }
@@ -26,13 +25,13 @@ class PessoaService(
         return pessoaRepository.save(pessoa)
     }
 
+    fun cadastrarPessoas(pessoas: List<Pessoa>): List<Pessoa> {
+        pessoas.forEach { pessoa -> pessoa.validarCadastro()}
+        return pessoaRepository.saveAll(pessoas)
+    }
+
     fun recuperarPessoa(pessoaFilter: PessoaFilter): Pagina<Pessoa> {
-        pessoaFilter.pagina?.let {
-            require(it >= 0) { "O número da página não pode ser negativo" }
-        }
-        pessoaFilter.tamanho?.let {
-            require(it > 0) { "O tamanho da página deve ser maior que zero" }
-        }
+        pessoaFilter.validarPaginacao()
 
         val pessoas = pessoaRepository.buscarDinamicamente(pessoaFilter)
 
@@ -45,15 +44,7 @@ class PessoaService(
     }
 
     fun atualizarPessoa(pessoaUpdateFilter: PessoaUpdateFilter): Pessoa {
-        require(pessoaUpdateFilter.id.isNotBlank()) { "O ID da pessoa é obrigatório para atualização" }
-
-        val temCamposParaAtualizar = !pessoaUpdateFilter.nome.isNullOrBlank() ||
-                !pessoaUpdateFilter.email.isNullOrBlank() ||
-                !pessoaUpdateFilter.dinamicos.isNullOrEmpty()
-
-        require(temCamposParaAtualizar) {
-            "Pelo menos um campo (nome, email ou dinamicos) deve ser informado para atualização"
-        }
+        pessoaUpdateFilter.validarAtualizacao()
 
         pessoaUpdateFilter.email?.takeIf { it.isNotBlank() }?.let { novoEmail ->
             val pessoaComMesmoEmail = pessoaRepository.findByEmail(novoEmail)

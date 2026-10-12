@@ -2,6 +2,10 @@ package com.nathannicolau.formulariodinamico.model
 
 import java.io.Serializable
 
+/**
+ * Classe para agrupamento de dados paginados
+ * */
+
 data class Pagina<T>(
     val numeroPagina: Int = 0,
     val totalPaginas: Int = 0,
@@ -41,11 +45,12 @@ data class Pagina<T>(
             )
         }
 
-        fun calcularTotalPaginas(totalRegistros: Int, tamanhoPagina: Int): Int {
+        private fun calcularTotalPaginas(totalRegistros: Int, tamanhoPagina: Int): Int {
             if (tamanhoPagina <= 0 || totalRegistros <= 0) return 0
             return kotlin.math.ceil(totalRegistros.toDouble() / tamanhoPagina).toInt()
         }
 
+        //Quando são poucos registros retornados
         fun <T> simples(data: List<T>): Pagina<T> {
             return Pagina(
                 numeroPagina = 1,
