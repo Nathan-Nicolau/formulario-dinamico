@@ -1,6 +1,6 @@
-package com.nathannicolau.formulariodinamico.repository
+package com.nathannicolau.formulariodinamico.repository.pessoa
 
-import com.nathannicolau.formulariodinamico.model.Pessoa
+import com.nathannicolau.formulariodinamico.model.pessoa.Pessoa
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 
