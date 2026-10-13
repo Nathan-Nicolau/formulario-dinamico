@@ -1,5 +1,8 @@
 package com.nathannicolau.formulariodinamico.model
 
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.mongodb.core.query.Criteria
+
 open class Filter(
     open val id: String? = null,
     open val dinamicos: Map<String, Any>? = null,
@@ -7,7 +10,11 @@ open class Filter(
     open val tamanho: Int? = null,
 ) {
 
-    fun possuiPaginacao() = pagina != null && tamanho != null
+    fun montarPageRequest(): PageRequest {
+        val pageNumber = (pagina ?: 0).coerceAtLeast(0)
+        val pageSize = (tamanho ?: 10).coerceAtLeast(1)
+        return PageRequest.of(pageNumber, pageSize)
+    }
 
     fun validarPaginacao() {
         pagina?.let {

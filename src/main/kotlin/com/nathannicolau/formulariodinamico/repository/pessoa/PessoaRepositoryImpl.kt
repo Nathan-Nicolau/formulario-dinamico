@@ -3,7 +3,7 @@ package com.nathannicolau.formulariodinamico.repository.pessoa
 import com.nathannicolau.formulariodinamico.model.pessoa.Pessoa
 import com.nathannicolau.formulariodinamico.model.pessoa.PessoaFilter
 import com.nathannicolau.formulariodinamico.model.pessoa.PessoaUpdateFilter
-import org.springframework.data.domain.PageRequest
+import com.nathannicolau.formulariodinamico.repository.Utils
 import org.springframework.data.mongodb.core.FindAndModifyOptions
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
@@ -17,7 +17,7 @@ class PessoaRepositoryCustomImpl(
 ) : PessoaRepositoryCustom {
 
     override fun buscarDinamicamente(pessoaFilter: PessoaFilter): List<Pessoa> {
-        val query = Query()
+        var query = Query()
 
         pessoaFilter.id?.takeIf { it.isNotBlank() }?.let { id ->
             query.addCriteria(Criteria.where("_id").`is`(id))
@@ -41,11 +41,9 @@ class PessoaRepositoryCustomImpl(
             }
         }
 
-        if (pessoaFilter.possuiPaginacao()) {
-            val pageNumber = (pessoaFilter.pagina ?: 0).coerceAtLeast(0)
-            val pageSize = (pessoaFilter.tamanho ?: 10).coerceAtLeast(1)
-            query.with(PageRequest.of(pageNumber, pageSize))
-        }
+        query = Utils.agruparConsultasCamposDinamicos(query, pessoaFilter.dinamicos)
+
+        query.with(pessoaFilter.montarPageRequest())
 
         // O MongoTemplate executa a query construída contra a coleção da classe Pessoa
         return mongoTemplate.find(query, Pessoa::class.java)
