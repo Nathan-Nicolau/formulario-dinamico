@@ -12,7 +12,7 @@ open class ProdutoFilter(
     override val dinamicos: Map<String, Any>? = null
 ): Filter(id, dinamicos), Serializable {
 
-    constructor(id: String, nome: String?, descricao: String?, dinamicos: Map<String, Any>? = null): this(
+    constructor(id: String?, nome: String?, descricao: String?, dinamicos: Map<String, Any>? = null): this(
         id = id,
         nome = nome,
         descricao = descricao,

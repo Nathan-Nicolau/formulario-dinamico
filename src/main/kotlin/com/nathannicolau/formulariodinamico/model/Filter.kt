@@ -16,6 +16,8 @@ open class Filter(
         return PageRequest.of(pageNumber, pageSize)
     }
 
+    open fun validarAtualizacao() {}
+
     fun validarPaginacao() {
         pagina?.let {
             require(it >= 0) { "O valor de página deve ser maior que 0" }

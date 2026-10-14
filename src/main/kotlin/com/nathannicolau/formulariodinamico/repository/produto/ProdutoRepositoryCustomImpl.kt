@@ -72,7 +72,6 @@ class ProdutoRepositoryCustomImpl(
         return mongoTemplate.findAndModify(query, update, options, Produto::class.java)
             ?: throw NoSuchElementException("Produto com o ID: ${produtoUpdateFilter.id} não encontrado")
 
-
     }
 
 }

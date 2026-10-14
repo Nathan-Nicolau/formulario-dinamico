@@ -1,5 +1,6 @@
 package com.nathannicolau.formulariodinamico.service.pessoa
 
+import com.nathannicolau.formulariodinamico.model.Pagina
 import com.nathannicolau.formulariodinamico.model.produto.Produto
 import com.nathannicolau.formulariodinamico.model.produto.ProdutoFilter
 import com.nathannicolau.formulariodinamico.model.produto.ProdutoUpdateFilter
@@ -14,14 +15,28 @@ class ProdutoService(
 ) {
 
     fun cadastrarProduto(produto: Produto): Produto {
+        produto.validarCadastro()
         return produtoReposity.save(produto)
     }
 
-    fun buscarProdutosDinamicamente(produtoFilter: ProdutoFilter): List<Produto> {
-        return produtoReposity.buscarDinamicamente(produtoFilter)
+    fun cadastrarProdutos(produtos: List<Produto>): List<Produto> {
+        produtos.forEach { produto -> produto.validarCadastro() }
+        return produtoReposity.saveAll(produtos)
+    }
+
+    fun recuperarProdutos(produtoFilter: ProdutoFilter): Pagina<Produto> {
+        produtoFilter.validarPaginacao()
+        val produtos = produtoReposity.buscarDinamicamente(produtoFilter)
+        return Pagina.comCalculo(
+            numeroPagina = produtoFilter.pagina ?: 1,
+            tamanhoPagina = produtoFilter.tamanho ?: 10,
+            totalRegistros = produtos.size,
+            data = produtos
+        )
     }
 
     fun atualizarProduto(produtoUpdateFilter: ProdutoUpdateFilter): Produto {
+        produtoUpdateFilter.validarAtualizacao()
         return produtoReposity.atualizarProduto(produtoUpdateFilter)
     }
 

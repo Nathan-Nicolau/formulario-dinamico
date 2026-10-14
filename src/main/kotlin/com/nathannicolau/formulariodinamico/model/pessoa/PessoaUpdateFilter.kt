@@ -12,7 +12,7 @@ data class PessoaUpdateFilter(
     override val dinamicos: Map<String, Any>? = null
 ): PessoaFilter(id, nome, email, dinamicos) {
 
-    fun validarAtualizacao() {
+    override fun validarAtualizacao() {
         require(id.isNotBlank()) { "O ID da pessoa é obrigatório para atualização" }
         require(!nome.isNullOrBlank() || !email.isNullOrBlank() || !dinamicos.isNullOrEmpty()) {
             "Pelo menos um campo (nome, email ou dinamicos) deve ser informado para atualização"
