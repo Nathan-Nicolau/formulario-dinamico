@@ -13,7 +13,7 @@ data class Produto(
     val nome: String? = null,
     val descricao: String? = null,
     val valor: BigDecimal? = null,
-    val dinamicos: Map<String, Any> = emptyMap()
+    val dinamicos: Map<String, Any>? = emptyMap()
 ): ValidadorDocumento, Serializable {
 
     override fun validarCadastro() {
